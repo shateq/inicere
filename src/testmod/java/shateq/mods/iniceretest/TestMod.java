@@ -10,9 +10,9 @@ import java.nio.file.Path;
 public class TestMod implements ClientModInitializer {
     @Element @Comment("Some comment")
     String toBeSaved = "haha";
-    @Element(key = "integer.path")
+    @Element("integer.path")
     int hahInt = 2;
-    @Element(key = "doubles.path")
+    @Element("doubles.path")
     double doubles$usingTrail = 6.0;
 
     @Override

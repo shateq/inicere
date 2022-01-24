@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 /**
- * Represents annotation processor.
+ * Annotation usage helpers.
  */
 public class Processor {
     public Processor() {}
@@ -30,10 +30,6 @@ public class Processor {
     protected Field[] filterElementFields(@NotNull Object o) {
         Field[] fields = o.getClass().getDeclaredFields();
         return (Field[]) Arrays.stream(fields).filter(field -> field.isAnnotationPresent(Element.class)).toArray();
-    }
-
-    protected boolean isImmutable(@NotNull Element e) {
-        return e.immutable();
     }
 
     protected HashMap<Element, Field> getElements(@NotNull Object o) {

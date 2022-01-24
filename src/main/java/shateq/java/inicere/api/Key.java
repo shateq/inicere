@@ -7,18 +7,18 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Entry key for config file.
  */
-public class Trail {
+public class Key {
     private final String index;
     @Nullable
     private final String[] paths;
-    public Trail(String index, String ...path) {
+    public Key(String index, String ...path) {
         this.index = index;
         this.paths = path;
     }
 
     @Contract(value = "_, _ -> new", pure = true)
-    public static @NotNull Trail of(String index, String ...path) {
-        return new Trail(index, path);
+    public static @NotNull Key of(String index, String ...path) {
+        return new Key(index, path);
     }
 
     public boolean isEmpty() {

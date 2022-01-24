@@ -63,7 +63,7 @@ public class Configuration extends Processor {
         c.load();
 
         for(Element e : elements.keySet()) {
-            String key = e.key();
+            String key = e.value();
             Field field = elements.get(e);
             field.setAccessible(true);
 
@@ -82,7 +82,7 @@ public class Configuration extends Processor {
         c.load();
 
         for(Element e : elements.keySet()) {
-            String key = e.key();
+            String key = e.value();
             Field field = elements.get(e);
             field.setAccessible(true);
 
@@ -95,7 +95,7 @@ public class Configuration extends Processor {
         c.close();
     }
 
-    public void write(@NotNull String key, Object value) throws ConfigurationException {
+    public void write(@NotNull String key, Object value) throws IOException {
         readOnlyException();
         final CommentedFileConfig c = toml();
         c.load();
@@ -110,7 +110,7 @@ public class Configuration extends Processor {
         return c.get(key);
     }
 
-    public <T> T retract(@NotNull String key) throws ConfigurationException {
+    public <T> T retract(@NotNull String key) throws IOException {
         readOnlyException();
         final CommentedFileConfig c = toml();
         c.load();
@@ -122,18 +122,14 @@ public class Configuration extends Processor {
     /**
      * Remove current configuration file.
      */
-    public void kill() throws ConfigurationException {
+    public void kill() throws IOException {
         readOnlyException();
-        try {
-            Files.deleteIfExists(path);
-        } catch (IOException e) {
-            throw new ConfigurationException(e.getMessage());
-        }
+        Files.deleteIfExists(path);
     }
 
-    private void readOnlyException() throws ConfigurationException {
+    private void readOnlyException() throws IOException {
         if(readOnly) {
-            throw new ConfigurationException("Configuration file is read-only!");
+            throw new IOException("Configuration file is read-only!");
         }
     }
 
@@ -145,6 +141,4 @@ public class Configuration extends Processor {
     public boolean viable() {
         return Files.isReadable(path) && Files.isWritable(path);
     }
-
-    // https://www.youtube.com/watch?v=4RTjMMUcuzk
 }

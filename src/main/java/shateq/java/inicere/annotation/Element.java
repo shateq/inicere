@@ -1,6 +1,7 @@
 package shateq.java.inicere.annotation;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -16,10 +17,7 @@ public @interface Element {
     /**
      * @return Specified config key.
      */
-    @NotNull String key() default "";
+    @NotNull String value() default "value";
 
-    /**
-     * @return true - if field should be Overriden by processor.
-     */
-    boolean immutable() default false;
+    @Nullable String comment() default "";
 }

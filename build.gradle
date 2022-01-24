@@ -30,6 +30,7 @@ dependencies {
 
 	include("com.electronwill.night-config:toml:${project.toml}")
 
+
 	testmodImplementation(sourceSets.main.output)
 }
 
@@ -37,19 +38,18 @@ java {
 	toolchain {
 		languageVersion.set(JavaLanguageVersion.of(17))
 	}
-	withSourcesJar()
-//	withJavadocJar()
+	withJavadocJar()
 }
 
 tasks {
 	compileJava {
 		options.encoding = "UTF-8" // Must have!
-		options.release.set(17) // Java 17 for 1.18+
+		options.release.set(17)
 	}
 
 	javadoc {
-		options.destinationDirectory(new File(rootProject.rootDir, "docs"))
 		options.encoding = "UTF-8"
+		options.destinationDirectory(new File(rootProject.rootDir, "docs"))
 	}
 
 	processResources {
@@ -63,7 +63,11 @@ tasks {
 
 	jar {
 		from("LICENSE") {
-			rename { "LICENSE_${project.archivesBaseName}"}
+			rename { "LICENSE_${rootProject.name}"}
+		}
+
+		manifest {
+			attributes["Implementation-Version"] = project.version
 		}
 	}
 }
@@ -81,22 +85,3 @@ loom {
 		}
 	}
 }
-
-/*
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			artifact(remapJar) {
-				builtBy remapJar
-			}
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
-		}
-	}
-	
-	repositories {
-		// Add repositories to publish to here.
-	}
-}
-*/

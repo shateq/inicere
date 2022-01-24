@@ -2,8 +2,12 @@ package shateq.java.inicere;
 
 import net.fabricmc.loader.api.FabricLoader;
 import org.jetbrains.annotations.NotNull;
-import shateq.java.inicere.api.*;
+import shateq.java.inicere.api.Action;
+import shateq.java.inicere.api.Configuration;
+import shateq.java.inicere.api.DefaultAction;
+import shateq.java.inicere.api.Key;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 /**
@@ -31,13 +35,6 @@ public class Inicere {
         this.bound = obj;
         lookup();
     }
-
-    /* I don't know if this should stay here...
-    public Inicere fileName(@NotNull String newName) {
-        this.fileName = newName;
-        this.config = new Configuration(getConfigPath());
-        return this;
-    }*/
 
     /**
      * @param obj Object used for searching of config entries.
@@ -119,7 +116,7 @@ public class Inicere {
     public <S> S set(String key, S value) {
         try {
             config.write(key, value);
-        } catch (ConfigurationException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         // Event
@@ -139,33 +136,47 @@ public class Inicere {
         act(new Action(Action.Sort.KILL), true);
         try {
             config.kill();
-        } catch (ConfigurationException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public <R> R get(@NotNull Trail key) {
+    public <R> R get(@NotNull Key key) {
         return get(key.toString());
     }
 
-    public <S> S set(@NotNull Trail key, S value) {
+    public <S> S set(@NotNull Key key, S value) {
         return set(key.toString(), value);
     }
 
-    public <T> T remove(@NotNull Trail key) {
+    public <T> T remove(@NotNull Key key) {
         return remove(key.toString());
     }
 
     /* TODO: Check out #defaultAction() */
-
-    private static @NotNull Path getConfigPath(@NotNull Path path) {
-        return Path.of(FabricLoader.getInstance().getConfigDir().toString(), path.toString());
+    private static @NotNull Path getConfigPath(@NotNull String file) {
+        return Path.of(FabricLoader.getInstance().getConfigDir().toString(), file);
     }
 
-    private static @NotNull Path getConfigPath(@NotNull String file) {
-        if(!file.endsWith(".toml")) {
-            file += ".toml";
+    /**
+     * Inicere builder
+     */
+    public static class Phi {
+        private Path file;
+        private Object object;
+
+        public Inicere build() {
+            return new Inicere(file, object);
         }
-        return Path.of(FabricLoader.getInstance().getConfigDir().toString(), file);
+
+        public Phi setFile(Path path) {
+            this.file = path;
+            return this;
+        }
+
+        public Phi setObject(Object object) {
+            this.object = object;
+            return this;
+        }
     }
 }
