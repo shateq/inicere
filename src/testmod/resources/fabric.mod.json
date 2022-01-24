@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "testmod",
+  "version": "1.0.0",
+  "license": "MIT",
+  "icon": "icon.png",
+
+  "name": "Inicere",
+  "description": "Sweet configuration library",
+  "authors": ["Shateq"],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/shateq/fabricmc-example/"
+  },
+  
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "shateq.mods.iniceretest.TestMod"
+    ]
+  },
+  "mixins": [
+    "testmod.mixins.json"
+  ],
+  
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "inicere": "*",
+    "minecraft": "1.18.x"
+  }
+}

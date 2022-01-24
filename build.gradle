@@ -1,0 +1,102 @@
+plugins {
+	id("fabric-loom") version "0.10.+"
+	id("maven-publish")
+    id("java-library")
+}
+
+version = "1.0.0"
+group = "shateq.java.inicere"
+archivesBaseName = "inicere-api"
+
+sourceSets {
+	testmod {
+		compileClasspath += sourceSets.main.compileClasspath
+		runtimeClasspath += sourceSets.main.runtimeClasspath
+	}
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	maven { url "https://maven.terraformersmc.com/releases" }
+	maven { url "https://jitpack.io" }
+}
+
+dependencies {
+	minecraft("com.mojang:minecraft:${project.minecraft}")
+	mappings(loom.officialMojangMappings())
+	modImplementation("net.fabricmc:fabric-loader:${project.loader}")
+	modImplementation("com.electronwill.night-config:toml:${project.toml}")
+
+	include("com.electronwill.night-config:toml:${project.toml}")
+
+	testmodImplementation(sourceSets.main.output)
+}
+
+java {
+	toolchain {
+		languageVersion.set(JavaLanguageVersion.of(17))
+	}
+	withSourcesJar()
+//	withJavadocJar()
+}
+
+tasks {
+	compileJava {
+		options.encoding = "UTF-8" // Must have!
+		options.release.set(17) // Java 17 for 1.18+
+	}
+
+	javadoc {
+		options.destinationDirectory(new File(rootProject.rootDir, "docs"))
+		options.encoding = "UTF-8"
+	}
+
+	processResources {
+		filteringCharset = "UTF-8" // Must have!
+
+		inputs.property "version", project.version
+		filesMatching("fabric.mod.json") {
+			expand "version": project.version
+		}
+	}
+
+	jar {
+		from("LICENSE") {
+			rename { "LICENSE_${project.archivesBaseName}"}
+		}
+	}
+}
+
+loom {
+	runs {
+		testmodClient {
+			client()
+			source(sourceSets.testmod)
+		}
+
+		testmodServer {
+			server()
+			source(sourceSets.testmod)
+		}
+	}
+}
+
+/*
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			artifact(remapJar) {
+				builtBy remapJar
+			}
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
+		}
+	}
+	
+	repositories {
+		// Add repositories to publish to here.
+	}
+}
+*/
