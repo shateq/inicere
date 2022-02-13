@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"shateq.java.inicere"},{"l":"shateq.java.inicere.annotation"},{"l":"shateq.java.inicere.api"}];updateSearchResults();
