@@ -5,6 +5,8 @@ import com.electronwill.nightconfig.core.file.FileConfig;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import shateq.java.inicere.annotation.Comment;
+import shateq.java.inicere.annotation.DataSection;
 import shateq.java.inicere.annotation.Element;
 
 import java.io.IOException;
@@ -13,13 +15,15 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermission;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * Operations on TOML files.
  */
-public class Configuration extends Processor {
+public class Configuration {
     private boolean readOnly = false;
     private final Path path;
 
@@ -58,7 +62,7 @@ public class Configuration extends Processor {
     }
 
     public void defaults(Object o) throws IllegalAccessException {
-        HashMap<Element, Field> elements = getElements(o);
+        Map<Element, Field> elements = getElements(o);
         final CommentedFileConfig c = toml();
         c.load();
 
@@ -77,7 +81,7 @@ public class Configuration extends Processor {
     }
 
     public void bindValues(Object o) throws IllegalAccessException {
-        HashMap<Element, Field> elements = getElements(o);
+        Map<Element, Field> elements = getElements(o);
         final CommentedFileConfig c = toml();
         c.load();
 
@@ -105,7 +109,7 @@ public class Configuration extends Processor {
 
     @Nullable
     public <T> T read(@NotNull String key) {
-        final FileConfig c = toml();
+        final CommentedFileConfig c = toml();
         c.load();
         return c.get(key);
     }
@@ -122,7 +126,7 @@ public class Configuration extends Processor {
     /**
      * Remove current configuration file.
      */
-    public void kill() throws IOException {
+    public void eliminate() throws IOException {
         readOnlyException();
         Files.deleteIfExists(path);
     }
@@ -135,10 +139,39 @@ public class Configuration extends Processor {
 
     @Contract(pure = true)
     private @NotNull String keyedName(@NotNull String s) {
-        return s.replace("$", ".");
+        return s.trim().replace("$", ".");
     }
 
     public boolean viable() {
         return Files.isReadable(path) && Files.isWritable(path);
+    }
+    // More helpers
+    protected static Map<Element, Field> getElements(@NotNull Object o) {
+        Map<Element, Field> elements = new HashMap<>();
+        Field[] fields = o.getClass().getDeclaredFields();
+        for(Field f : fields) {
+            if(f.isAnnotationPresent(Element.class)) {
+                Element a = f.getAnnotation(Element.class);
+                elements.put(a, f);
+            }
+        }
+        return elements;
+    }
+
+    protected static Field[] filterElementFields(@NotNull Object o) {
+        Field[] fields = o.getClass().getDeclaredFields();
+        return (Field[]) Arrays.stream(fields).filter(field -> field.isAnnotationPresent(Element.class)).toArray();
+    }
+
+    protected static @Nullable Comment getComment(@NotNull Field f) {
+        return f.getAnnotation(Comment.class);
+    }
+
+    protected static @Nullable Element getElement(@NotNull Field f) {
+        return f.getAnnotation(Element.class);
+    }
+
+    protected static @Nullable DataSection getDataSection(@NotNull Object o) {
+        return o.getClass().getAnnotation(DataSection.class);
     }
 }

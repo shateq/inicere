@@ -19,15 +19,14 @@ public class Inicere {
     private DefaultAction defaultAction;
     private DefaultAction subscription;
     // Accessible object
-    public Object bound;
+    private Object bound;
 
     public Inicere(String fileName) {
         this(getConfigPath(fileName));
     }
 
-    public Inicere(@NotNull Path path) {
-        this.path = getConfigPath(path.toString());
-        this.config = new Configuration(this.path);
+    public Inicere(Path path) {
+        this(path, null);
     }
 
     public Inicere(Path path, Object obj) {
@@ -51,6 +50,14 @@ public class Inicere {
         this.bound = obj;
         lookup();
         return this;
+    }
+
+    /**
+     * Used to access "bound" object, that has to be private.
+     * @return Bound object, null (if you didn't bind object to Inicere).
+     */
+    public Object bound() {
+        return this.bound;
     }
 
     /**
@@ -98,6 +105,7 @@ public class Inicere {
 
     // TODO: fix up the logic
     private void lookup() {
+        if(bound == null) return;
         try {
             config.bindValues(bound);
         } catch (IllegalAccessException e) {
@@ -105,12 +113,16 @@ public class Inicere {
         }
     }
 
-    public Inicere readOnly(boolean readOnly) {
-        config.setReadOnly(readOnly);
+    /**
+     * Making class read-only may not be reverted.
+     * @return Read-only worker class
+     */
+    public Inicere makePermanent() {
+        config.setReadOnly(true);
         return this;
     }
 
-    public boolean readOnly() {
+    public boolean isPermanent() {
         return config.isReadOnly();
     }
 
@@ -139,11 +151,11 @@ public class Inicere {
         return removed;
     }
 
-    public void eliminate() {
+    public void kill() {
         // Action handling
         act(new Action(Action.Type.KILL), true);
         try {
-            config.kill();
+            config.eliminate();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -161,22 +173,32 @@ public class Inicere {
         return remove(key.toString());
     }
 
-    /* TODO: Check out #defaultAction() */
     private static @NotNull Path getConfigPath(@NotNull String file) {
         return Path.of(FabricLoader.getInstance().getConfigDir().toString(), file);
     }
 
     /**
      * Inicere builder
+     * Ability to tweak worker class or use predefined settings.
      */
     public static class Phi {
+        protected boolean permanent = false;
         protected Path file;
-        protected Object object;
+        protected Object object = null;
+        protected DefaultAction action = null;
 
         public Inicere build() {
-            return new Inicere(file, object);
+            Inicere inicere = new Inicere(file);
+            if(permanent) inicere.makePermanent();
+            if(object != null) inicere.bind(object);
+            if(action != null) inicere.defaultAction(action);
+            return inicere;
         }
 
+        /**
+         * File is required for library to work.
+         * @param path Path to operational file.
+         */
         public Phi setFile(Path path) {
             this.file = path;
             return this;
@@ -184,6 +206,16 @@ public class Inicere {
 
         public Phi setObject(Object object) {
             this.object = object;
+            return this;
+        }
+
+        public Phi setDefaultAction(DefaultAction action) {
+            this.action = action;
+            return this;
+        }
+
+        public Phi makePermanent() {
+            this.permanent = true;
             return this;
         }
     }
