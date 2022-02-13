@@ -16,9 +16,10 @@ import java.nio.file.Path;
 public class Inicere {
     private final Configuration config;
     private final Path path;
-    private Object bound;
     private DefaultAction defaultAction;
     private DefaultAction subscription;
+    // Accessible object
+    public Object bound;
 
     public Inicere(String fileName) {
         this(getConfigPath(fileName));
@@ -35,6 +36,12 @@ public class Inicere {
         this.bound = obj;
         lookup();
     }
+
+//    public Inicere(Object obj) {
+//        this.bound = obj;
+//        this.path = obj.getClass().getSimpleName();
+//        this.config = new Configuration(this.path);
+//    }
 
     /**
      * @param obj Object used for searching of config entries.
@@ -81,7 +88,7 @@ public class Inicere {
 
     public void resetToDefaults() {
         // Action handling
-        act(new Action(Action.Sort.DEFAULT), true);
+        act(new Action(Action.Type.DEFAULT), true);
         try {
             config.defaults(bound);
         } catch (IllegalAccessException e) {
@@ -89,6 +96,7 @@ public class Inicere {
         }
     }
 
+    // TODO: fix up the logic
     private void lookup() {
         try {
             config.bindValues(bound);
@@ -109,7 +117,7 @@ public class Inicere {
     public <R> R get(String key) {
         R value = config.read(key);
         // Event
-        act(new Action(key, value, Action.Sort.GET), false);
+        act(new Action(key, value, Action.Type.GET), false);
         return value;
     }
 
@@ -120,20 +128,20 @@ public class Inicere {
             e.printStackTrace();
         }
         // Event
-        act(new Action(key, value, Action.Sort.SET), false);
+        act(new Action(key, value, Action.Type.SET), false);
         return value;
     }
 
     public <T> T remove(String key) {
         T removed = config.read(key);
         // Event
-        act(new Action(key, removed, Action.Sort.DELETE), false);
+        act(new Action(key, removed, Action.Type.DELETE), false);
         return removed;
     }
 
     public void eliminate() {
         // Action handling
-        act(new Action(Action.Sort.KILL), true);
+        act(new Action(Action.Type.KILL), true);
         try {
             config.kill();
         } catch (IOException e) {
@@ -162,8 +170,8 @@ public class Inicere {
      * Inicere builder
      */
     public static class Phi {
-        private Path file;
-        private Object object;
+        protected Path file;
+        protected Object object;
 
         public Inicere build() {
             return new Inicere(file, object);

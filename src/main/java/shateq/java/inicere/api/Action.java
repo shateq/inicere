@@ -8,15 +8,15 @@ public class Action {
     /*private boolean cancelled = false; TODO: how reading an entry could be cancelled? */
     private final Object value;
     private final String key;
-    private final Sort type;
+    private final Type type;
 
-    public Action(Sort type) {
+    public Action(Type type) {
         this.type = type;
         this.key = null;
         this.value = null;
     }
 
-    public Action(String key, Object value, Sort type) {
+    public Action(String key, Object value, Type type) {
         this.key = key;
         this.value = value;
         this.type = type;
@@ -38,11 +38,11 @@ public class Action {
         return key;
     }
 
-    public Sort getType() {
+    public Type getType() {
         return type;
     }
 
-    public enum Sort {
+    public enum Type {
         SET, GET, DELETE, KILL, DEFAULT
     }
 }
