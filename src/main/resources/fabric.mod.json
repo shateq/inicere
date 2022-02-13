@@ -6,11 +6,11 @@
   "icon": "icon.png",
 
   "name": "Inicere",
-  "description": "Sweet configuration library",
+  "description": "Practical library for working with TOML files",
   "authors": ["Shateq"],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/shateq/fabricmc-example/"
+    "homepage": "https://shateq.github.io/inicere/",
+    "sources": "https://github.com/shateq/inicere/"
   },
   
   "environment": "*",
