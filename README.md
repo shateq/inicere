@@ -17,23 +17,40 @@ Why jsnen if you can get into TOML?!
 
 ## Getting started
 - Explore javadocs: https://shateq.github.io/inicere/
+- Check out [Wiki](https://github.com/shateq/inicere/wiki)
 
 <details>
-<summary>Add as a dependency, using Gradle</summary>
+<summary><strong>Add as a dependency</strong></summary>
 
+**Gradle**
 ```groovy
 repositories {
     maven { url "https://jitpack.io" }
 }
 
 dependencies {
-    modImplementation("cf.shateq:Inicere:(Version tag)")
-    include("cf.shateq:Inicere:(Version tag)")
+    implementation("cf.shateq:Inicere:(Version tag)")
 }
+```
+
+**Maven**
+```xml
+<repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+</repository>
+```
+```xml
+<dependency>
+    <groupId>cf.shateq</groupId>
+    <artifactId>Inicere</artifactId>
+    <version>(Version Tag)</version>
+</dependency>
 ```
 </details>
 
-### Then, create a new Inicere object or use the builder.
+### Then
+Create a new Inicere object or use the builder. At this point you can call yourself a library user.
 
 ```java
 public class AnyName {
@@ -49,11 +66,10 @@ public class AnyName {
         inicere.get("some.key"); // 3.14
 
         // Reflection, requires you to bind an object
-        Inicere binding = new Inicere.Phi.path("file-name.toml")
-        .defaultAction(a -> System.out.println(a.getKey()))
-        .subscription(a -> a.pass())
-        .bind(object)
-        .build(); // Hard way
+        Inicere binding = new Inicere.Phi()
+                .setFile(Path.of("file-name.toml"))
+                .setObject(object)
+                .build(); // Hard way
         
         binding.set("object", true);
         object.good; // true
@@ -61,7 +77,7 @@ public class AnyName {
 }
 ```
 
-### *I want more!*
+**I want more!**
 
 <details>
 <summary>You have been warned.</summary>
@@ -70,15 +86,15 @@ public class AnyName {
 public class Main {
     public static void main(String[] args) {
         Inicere paths = new Inicere(Path.of("file-name.toml"));
-        i.bind(new DefaultFile());
-        i.bound().key$to$integer; // 2
+        paths.bind(new DefaultFile());
+        paths.bound().key$to$integer; // 2
 
-        i.set("key.to.integer", 4);
-        i.bound().key$to$integer // 4
+        paths.set("key.to.integer", 4);
+        paths.bound().key$to$integer; // 4
 
         Inicere sections = new Inicere(new AsAFile());
+        
         sections.set("version", "1.0.1");
-
         sections.get("version"); // "1.0.1"
     }
 

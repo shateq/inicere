@@ -47,7 +47,7 @@ tasks {
 
 	javadoc {
 		options.encoding = "UTF-8"
-		options.destinationDirectory(new File(rootProject.rootDir, "docs"))
+		// options.destinationDirectory(new File(rootProject.rootDir, "docs"))
 	}
 
 	processResources {
