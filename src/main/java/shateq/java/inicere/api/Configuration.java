@@ -1,8 +1,6 @@
 package shateq.java.inicere.api;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.file.FileConfig;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import shateq.java.inicere.annotation.Comment;
@@ -72,7 +70,7 @@ public class Configuration {
             field.setAccessible(true);
 
             if(key.isEmpty()) {
-                key = keyedName(field.getName());
+                key = Key.keyedName(field.getName());
             }
 
             c.set(key, field.get(o));
@@ -91,7 +89,7 @@ public class Configuration {
             field.setAccessible(true);
 
             if(key.isEmpty()) {
-                key = keyedName(field.getName());
+                key = Key.keyedName(field.getName());
             }
 
             field.set(o, c.get(key));
@@ -135,11 +133,6 @@ public class Configuration {
         if(readOnly) {
             throw new IOException("Configuration file is read-only!");
         }
-    }
-
-    @Contract(pure = true)
-    private @NotNull String keyedName(@NotNull String s) {
-        return s.trim().replace("$", ".");
     }
 
     public boolean viable() {

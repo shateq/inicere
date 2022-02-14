@@ -1,13 +1,16 @@
 package shateq.mods.iniceretest;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
 import shateq.java.inicere.Inicere;
 import shateq.java.inicere.annotation.Comment;
 import shateq.java.inicere.annotation.Element;
 
+import java.nio.file.Path;
+
 public class TestMod implements ClientModInitializer {
     @Element @Comment("Some comment")
-    String toBeSaved = "haha";
+    String toBeSaved = "Some message";
     @Element("integer.path")
     int hahInt = 2;
     @Element("doubles.path")
@@ -15,9 +18,15 @@ public class TestMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        Inicere hah = new Inicere("config.toml")
-                .subscribe((a -> System.out.println("Key "+a.getKey()+" with value: "+a.getValue())));
+        Inicere hah = Inicere.Phi.justKeyValue(configPath("config.toml"));
+        Inicere builder = new Inicere.Phi()
+                .setFile(FabricLoader.getInstance().getConfigDir().resolve("file-toml.toml"))
+                .build();
 
         System.out.println(hah.bound());
+    }
+
+    static Path configPath(String path) {
+        return Path.of(FabricLoader.getInstance().getConfigDir().toString(), path);
     }
 }

@@ -2,38 +2,34 @@ package shateq.java.inicere.api;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Entry key for config file.
  */
 public class Key {
-    private final String index;
-    @Nullable
     private final String[] paths;
-    public Key(String index, String ...path) {
-        this.index = index;
-        this.paths = path;
+    public Key(String ...paths) {
+        this.paths = paths;
     }
 
-    @Contract(value = "_, _ -> new", pure = true)
-    public static @NotNull Key of(String index, String ...path) {
-        return new Key(index, path);
+    public static @NotNull Key of(String ...paths) {
+        return new Key(paths);
     }
 
-    public boolean isEmpty() {
-        return index.trim().isEmpty();
+    @Contract(pure = true)
+    public static @NotNull String keyedName(@NotNull String s) {
+        return s.replace("$", ".").trim();
     }
 
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append(index);
-        for(String entry : paths) {
-            if(!entry.trim().isEmpty()) {
-                s.append(".").append(entry);
+        s.append(paths[0]);
+        for(var i = 1; i < paths.length; i++) {
+            if(!paths[i].trim().isEmpty()) {
+                s.append(".").append(paths[i]);
             }
         }
-        return s.toString();
+        return s.toString().trim();
     }
 }

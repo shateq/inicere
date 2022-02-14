@@ -3,14 +3,12 @@
   "id": "testmod",
   "version": "1.0.0",
   "license": "MIT",
-  "icon": "icon.png",
 
-  "name": "Inicere",
-  "description": "Sweet configuration library",
+  "name": "InicereTestMod",
+  "description": "Test is all done here.",
   "authors": ["Shateq"],
   "contact": {
     "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/shateq/fabricmc-example/"
   },
   
   "environment": "*",

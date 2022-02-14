@@ -1,11 +1,10 @@
 package shateq.java.inicere.api;
 
 /**
- * Action event factors.
+ * Generic Action context.
  */
 @SuppressWarnings("unused")
 public class Action {
-    /*private boolean cancelled = false; TODO: how reading an entry could be cancelled? */
     private final Object value;
     private final String key;
     private final Type type;
@@ -22,17 +21,10 @@ public class Action {
         this.type = type;
     }
 
-    /* Should, or shouldn't this be exposed? TODO: rethink */
+    /* TODO: Should, or shouldn't this be exposed? */
     public Object getValue() {
         return value;
     }
-
-    /*public void cancel() {
-        cancelled = true;
-    }
-    public boolean wasCancelled() {
-        return cancelled;
-    }*/
 
     public String getKey() {
         return key;

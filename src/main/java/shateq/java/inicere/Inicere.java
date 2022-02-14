@@ -1,6 +1,7 @@
 package shateq.java.inicere;
 
 import net.fabricmc.loader.api.FabricLoader;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import shateq.java.inicere.api.Action;
 import shateq.java.inicere.api.Configuration;
@@ -186,6 +187,15 @@ public class Inicere {
         protected Path file;
         protected Object object = null;
         protected DefaultAction action = null;
+
+        @Contract("_ -> new")
+        public static Inicere permanentFile(Path path) {
+            return new Inicere(path).makePermanent();
+        }
+
+        public static Inicere permanentBoundFile(Path path, Object object) {
+            return new Inicere(path, object).makePermanent();
+        }
 
         public Inicere build() {
             Inicere inicere = new Inicere(file);
