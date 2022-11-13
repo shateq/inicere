@@ -1,85 +1,83 @@
 plugins {
-	id("fabric-loom") version "0.11.+"
-	id("maven-publish")
+    id("fabric-loom") version "0.12.+"
+    id("maven-publish")
     id("java-library")
 }
 
 version = "1.0.0"
 group = "shateq.java.inicere"
-archivesBaseName = "inicere-api"
+base.archivesName = "inicere-api"
 
 sourceSets {
-	testmod {
-		compileClasspath += sourceSets.main.compileClasspath
-		runtimeClasspath += sourceSets.main.runtimeClasspath
-	}
+    testmod {
+        compileClasspath += sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
 }
 
 repositories {
-	mavenCentral()
-	maven { url "https://maven.terraformersmc.com/releases" }
-	maven { url "https://jitpack.io" }
+    mavenCentral()
+    maven { url "https://maven.terraformersmc.com/releases" }
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
-	minecraft("com.mojang:minecraft:${project.minecraft}")
-	mappings(loom.officialMojangMappings())
-	modImplementation("net.fabricmc:fabric-loader:${project.loader}")
-	modImplementation("com.electronwill.night-config:toml:${project.toml}")
+    minecraft("com.mojang:minecraft:${project.minecraft}")
+    mappings(loom.officialMojangMappings())
+    modImplementation("net.fabricmc:fabric-loader:${project.loader}")
+    modImplementation("com.electronwill.night-config:toml:${project.toml}")
 
-	include("com.electronwill.night-config:toml:${project.toml}")
+    include("com.electronwill.night-config:toml:${project.toml}")
 
-	testmodImplementation(sourceSets.main.output)
+    testmodImplementation(sourceSets.main.output)
 }
 
 java {
-	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(17))
-	}
-	withJavadocJar()
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+    withJavadocJar()
 }
 
 tasks {
-	compileJava {
-		options.encoding = "UTF-8" // Must have!
-		options.release.set(17)
-	}
+    compileJava {
+        options.encoding = "UTF-8"
+        options.release.set(17)
+    }
+    javadoc {
+        options.encoding = "UTF-8"
+        // options.destinationDirectory(new File(rootProject.rootDir, "docs"))
+    }
+    processResources {
+        filteringCharset = "UTF-8"
 
-	javadoc {
-		options.encoding = "UTF-8"
-		// options.destinationDirectory(new File(rootProject.rootDir, "docs"))
-	}
+        inputs.property "version", project.version
+        filesMatching("fabric.mod.json") {
+            expand("version": project.version)
+        }
+    }
 
-	processResources {
-		filteringCharset = "UTF-8" // Must have!
+    jar {
+        from("LICENSE") {
+            rename { "LICENSE_${rootProject.name}" }
+        }
 
-		inputs.property "version", project.version
-		filesMatching("fabric.mod.json") {
-			expand "version": project.version
-		}
-	}
-
-	jar {
-		from("LICENSE") {
-			rename { "LICENSE_${rootProject.name}"}
-		}
-
-		manifest {
-			attributes["Implementation-Version"] = project.version
-		}
-	}
+        manifest {
+            attributes["Implementation-Version"] = project.version
+        }
+    }
 }
 
 loom {
-	runs {
-		testmodClient {
-			client()
-			source(sourceSets.testmod)
-		}
+    runs {
+        testmodClient {
+            client()
+            source(sourceSets.testmod)
+        }
 
-		testmodServer {
-			server()
-			source(sourceSets.testmod)
-		}
-	}
+        testmodServer {
+            server()
+            source(sourceSets.testmod)
+        }
+    }
 }
