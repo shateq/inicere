@@ -1,21 +1,12 @@
-# ⚠ Experimental - 33.3% working here.
+# Experimental - only an idea
 
 # **Inicere**
 
 Lightweight, practical library for working with TOML files.
 
-<details>
-<summary>Library destinations.</summary>
-Lightweight implementation to work on multiple files using simple operations (with event handler) built on top of the `java.nio package`.
-</details>
+Goal: Lightweight work multiple files using simple (with event handler)
 
 <hr>
-
-### Still using JSON?
-
-Why jsnen if you can get into TOML?!
-
-- https://github.com/toml-lang/toml/
 
 ## Getting started
 
@@ -60,7 +51,7 @@ dependencies {
 
 ### Then
 
-Create a new Inicere object or use the builder. At this point you can call yourself a library user.
+Create a new Inicere object.
 
 ```java
 public class AnyName {
@@ -87,10 +78,8 @@ public class AnyName {
 }
 ```
 
-**I want more!**
-
 <details>
-<summary>You have been warned.</summary>
+<summary>I want more!</summary>
 
 ```java
 public class Main {
@@ -126,7 +115,6 @@ public class Main {
 ```
 
 </details>
-<hr>
 
 ### **License**
 
