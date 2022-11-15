@@ -1,6 +1,5 @@
 package shateq.java.inicere;
 
-import net.fabricmc.loader.api.FabricLoader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import shateq.java.inicere.api.Action;
@@ -23,7 +22,7 @@ public class Inicere {
     private Object bound;
 
     public Inicere(String fileName) {
-        this(getConfigPath(fileName));
+        this(Path.of(fileName)); // TODO: broken
     }
 
     public Inicere(Path path) {
@@ -174,9 +173,10 @@ public class Inicere {
         return remove(key.toString());
     }
 
-    private static @NotNull Path getConfigPath(@NotNull String file) {
-        return Path.of(FabricLoader.getInstance().getConfigDir().toString(), file);
-    }
+    // TODO: move
+//    private static @NotNull Path getConfigPath(@NotNull String file) {
+//        return Path.of(FabricLoader.getInstance().getConfigDir().toString(), file);
+//    }
 
     /**
      * Inicere builder

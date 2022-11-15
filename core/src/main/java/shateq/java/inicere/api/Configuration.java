@@ -1,6 +1,5 @@
 package shateq.java.inicere.api;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import shateq.java.inicere.annotation.Comment;
@@ -33,9 +32,10 @@ public class Configuration {
         prepareAbsent();
     }
 
-    private CommentedFileConfig toml() {
-        return CommentedFileConfig.builder(path).autosave().charset(StandardCharsets.UTF_8).build();
-    }
+    // TODO: refactoring
+//    private CommentedFileConfig toml() {
+//        return CommentedFileConfig.builder(path).autosave().charset(StandardCharsets.UTF_8).build();
+//    }
 
     private void prepareAbsent() {
         try {
@@ -61,64 +61,68 @@ public class Configuration {
 
     public void defaults(Object o) throws IllegalAccessException {
         Map<Element, Field> elements = getElements(o);
-        final CommentedFileConfig c = toml();
-        c.load();
-
-        for(Element e : elements.keySet()) {
-            String key = e.value();
-            Field field = elements.get(e);
-            field.setAccessible(true);
-
-            if(key.isEmpty()) {
-                key = Key.keyedName(field.getName());
-            }
-
-            c.set(key, field.get(o));
-        }
-        c.close();
+//        final CommentedFileConfig c = toml();
+//        c.load();
+//
+//        for(Element e : elements.keySet()) {
+//            String key = e.value();
+//            Field field = elements.get(e);
+//            field.setAccessible(true);
+//
+//            if(key.isEmpty()) {
+//                key = Key.keyedName(field.getName());
+//            }
+//
+//            c.set(key, field.get(o));
+//        }
+//        c.close();
     }
 
     public void bindValues(Object o) throws IllegalAccessException {
-        Map<Element, Field> elements = getElements(o);
-        final CommentedFileConfig c = toml();
-        c.load();
-
-        for(Element e : elements.keySet()) {
-            String key = e.value();
-            Field field = elements.get(e);
-            field.setAccessible(true);
-
-            if(key.isEmpty()) {
-                key = Key.keyedName(field.getName());
-            }
-
-            field.set(o, c.get(key));
-        }
-        c.close();
+//        Map<Element, Field> elements = getElements(o);
+//        final CommentedFileConfig c = toml();
+//        c.load();
+//
+//        for(Element e : elements.keySet()) {
+//            String key = e.value();
+//            Field field = elements.get(e);
+//            field.setAccessible(true);
+//
+//            if(key.isEmpty()) {
+//                key = Key.keyedName(field.getName());
+//            }
+//
+//            field.set(o, c.get(key));
+//        }
+//        c.close();
     }
 
     public void write(@NotNull String key, Object value) throws IOException {
-        readOnlyException();
-        final CommentedFileConfig c = toml();
-        c.load();
-        c.set(key, value);
-        c.close();
+//        readOnlyException();
+//        final CommentedFileConfig c = toml();
+//        c.load();
+//        c.set(key, value);
+//        c.close();
     }
 
     @Nullable
     public <T> T read(@NotNull String key) {
-        final CommentedFileConfig c = toml();
-        c.load();
-        return c.get(key);
+//        final CommentedFileConfig c = toml();
+//        c.load();
+//        return c.get(key);
+        // TODO: broken 1
+        return (T) "read";
     }
 
     public <T> T retract(@NotNull String key) throws IOException {
-        readOnlyException();
-        final CommentedFileConfig c = toml();
-        c.load();
-        T retracted = c.get(key);
-        c.remove(key);
-        return retracted;
+//        readOnlyException();
+//        final CommentedFileConfig c = toml();
+//        c.load();
+//        T retracted = c.get(key);
+//        c.remove(key);
+//        return retracted;
+        // TODO: broken 2
+        return (T) "read";
     }
 
     /**

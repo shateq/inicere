@@ -1,11 +1,11 @@
 pluginManagement {
     repositories {
-        maven { url "https://maven.fabricmc.net/" }
-        mavenCentral()
         gradlePluginPortal()
+        maven("https://maven.fabricmc.net/")
+        maven("https://repo.jpenilla.xyz/snapshots/")
     }
 }
+includeBuild("build-logic")
 
-rootProject.name = "Inicere"
-
+rootProject.name = "inicere"
 include(":core", ":fabric")
