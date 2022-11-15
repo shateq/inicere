@@ -4,25 +4,26 @@
   "version": "${version}",
   "license": "MIT",
   "icon": "icon.png",
-
   "name": "Inicere",
   "description": "Practical library for working with TOML files",
-  "authors": ["Shateq"],
+  "authors": [
+    "Shateq"
+  ],
+  "contributors": [],
   "contact": {
     "homepage": "https://shateq.github.io/inicere/",
     "sources": "https://github.com/shateq/inicere/"
   },
-  
   "environment": "*",
-  "entrypoints": {},
-  "mixins": [],
   "depends": {
-    "fabricloader": ">=0.11.3",
+    "fabricloader": ">=0.12.0",
     "minecraft": "1.18.x"
   },
   "custom": {
     "modmenu": {
-      "badges": ["library"]
+      "badges": [
+        "library"
+      ]
     }
   }
 }

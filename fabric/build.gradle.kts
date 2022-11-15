@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(project(":core"))
+    include(project(":core"))
 }
 
 /* TODO: testmod to kotlin dsl

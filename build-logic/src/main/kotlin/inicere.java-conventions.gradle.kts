@@ -2,7 +2,7 @@ plugins {
     java
 }
 
-base.archivesName.set("inicere-${project.name}")
+base.archivesName.set("inicere-${project.name}-${rootProject.version}")
 
 repositories {
     mavenCentral()

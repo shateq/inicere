@@ -19,6 +19,6 @@ tasks.processResources {
     filteringCharset = "UTF-8"
 
     filesMatching("fabric.mod.json") {
-        expand("version" to project.version)
+        expand("version" to rootProject.version)
     }
 }
