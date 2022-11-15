@@ -7,3 +7,5 @@ pluginManagement {
 }
 
 rootProject.name = "Inicere"
+
+include(":core", ":fabric")
