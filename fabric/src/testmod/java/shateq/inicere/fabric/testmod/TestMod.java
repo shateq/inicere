@@ -6,6 +6,7 @@ import shateq.inicere.impl.Inicere;
 import shateq.inicere.annotate.Comment;
 import shateq.inicere.annotate.Element;
 
+import java.io.File;
 import java.nio.file.Path;
 
 public class TestMod implements ClientModInitializer {
@@ -19,7 +20,7 @@ public class TestMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        Inicere inicere = new Inicere("config.toml");
+        Inicere inicere = new Inicere(new File("name"));
         System.out.println("Instantiated");
     }
     // TODO: use fabric inicere wrapper

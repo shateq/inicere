@@ -1,67 +1,96 @@
 package shateq.inicere.impl;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import shateq.inicere.api.Action;
 import shateq.inicere.api.Configuration;
 import shateq.inicere.api.DefaultAction;
-import shateq.inicere.api.Key;
+import shateq.inicere.api.Worker;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
 /**
  * Inicere worker.
  */
-public class Inicere {
-    private final Configuration config;
-    private final Path path;
+public class Inicere implements Configuration, Worker {
+    // TODO: is config field needed?
+    private final Inicere config;
+    private File file;
     private DefaultAction defaultAction;
     private DefaultAction subscription;
+
+    public boolean readonly;
     // Accessible object
     private Object bound;
 
-    public Inicere(String fileName) {
-        this(Path.of(fileName)); // TODO: broken
+    public Inicere(File file) {
+        this.file = file;
+        this.config = new Inicere(file);
     }
 
-    public Inicere(Path path) {
-        this(path, null);
+    public Inicere(@NotNull Path path) {
+        this(path.toFile());
     }
 
-    public Inicere(Path path, Object obj) {
-        this.path = path;
-        this.config = new Configuration(this.path);
+    public Inicere(File file, Object obj) {
+        this(file);
         this.bound = obj;
-        lookup();
     }
 
-//    public Inicere(Object obj) {
-//        this.bound = obj;
-//        this.path = obj.getClass().getSimpleName();
-//        this.config = new Configuration(this.path);
-//    }
-
-    /**
-     * @param obj Object used for searching of config entries.
-     * @return Builder class with new properties.
-     */
-    public Inicere bind(@NotNull Object obj) {
-        this.bound = obj;
-        lookup();
+    @Override
+    public Inicere setFile(File file) {
+        this.file = file;
         return this;
     }
 
-    /**
-     * Used to access "bound" object, that has to be private.
-     * @return Bound object, null (if you didn't bind object to Inicere).
-     */
-    public Object bound() {
-        return this.bound;
+    @Override
+    public File file() {
+        return file;
     }
 
+    @Override
+    public Inicere bind(Object obj) {
+        this.bound = obj;
+        return this;
+    }
+
+    @Override
+    public Object bound() {
+        return bound;
+    }
+
+    @Override
+    public <R> R get(String key) {
+        return config.get(key);
+    }
+
+    @Override
+    public <S> S set(String key, S value) throws IOException {
+        throwIfReadonly();
+        return config.set(key, value);
+    }
+
+    @Override
+    public <D> D delete(String key) throws IOException {
+        throwIfReadonly();
+        return config.delete(key);
+    }
+
+    @Override
+    public String kill() {
+        return config.kill();
+    }
+
+    @Override
+    public void setReadonly(boolean readonly) {
+        this.readonly = readonly;
+    }
+
+    //TODO: should be in Worker interface
     /**
      * Initialize acton conditions.
+     *
      * @param thing - Action context.
      * @return Modified (or not) Action object.
      */
@@ -77,6 +106,7 @@ public class Inicere {
     /**
      * Function fired on generating configuration, or resetting one.
      * See also {@link #subscribe(DefaultAction)}
+     *
      * @param action Your lambda.
      */
     public Inicere defaultAction(@NotNull DefaultAction action) {
@@ -86,6 +116,7 @@ public class Inicere {
 
     /**
      * Fired before any action done with configuration except resetting it, see {@link #defaultAction(DefaultAction)}
+     *
      * @param action Your lambda.
      */
     public Inicere subscribe(@NotNull DefaultAction action) {
@@ -93,135 +124,14 @@ public class Inicere {
         return this;
     }
 
-    public void resetToDefaults() {
-        // Action handling
-        act(new Action(Action.Type.DEFAULT), true);
-        try {
-            config.defaults(bound);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // TODO: fix up the logic
-    private void lookup() {
-        if(bound == null) return;
-        try {
-            config.bindValues(bound);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Making class read-only may not be reverted.
-     * @return Read-only worker class
+    /*
+    Helpers
      */
-    public Inicere makePermanent() {
-        config.setReadOnly(true);
-        return this;
+    private void throwIfReadonly() throws IOException {
+        if (readonly) throw new IOException("Write access denied.");
     }
 
-    public boolean isPermanent() {
-        return config.isReadOnly();
-    }
-
-    public <R> R get(String key) {
-        R value = config.read(key);
-        // Event
-        act(new Action(key, value, Action.Type.GET), false);
-        return value;
-    }
-
-    public <S> S set(String key, S value) {
-        try {
-            config.write(key, value);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // Event
-        act(new Action(key, value, Action.Type.SET), false);
-        return value;
-    }
-
-    public <T> T remove(String key) {
-        T removed = config.read(key);
-        // Event
-        act(new Action(key, removed, Action.Type.DELETE), false);
-        return removed;
-    }
-
-    public void kill() {
-        // Action handling
-        act(new Action(Action.Type.KILL), true);
-        try {
-            config.eliminate();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public <R> R get(@NotNull Key key) {
-        return get(key.toString());
-    }
-
-    public <S> S set(@NotNull Key key, S value) {
-        return set(key.toString(), value);
-    }
-
-    public <T> T remove(@NotNull Key key) {
-        return remove(key.toString());
-    }
-
-    /**
-     * Inicere builder
-     * Ability to tweak worker class or use predefined settings.
-     */
-    public static class Phi {
-        protected boolean permanent = false;
-        protected Path file;
-        protected Object object = null;
-        protected DefaultAction action = null;
-
-        @Contract("_ -> new")
-        public static Inicere permanentFile(Path path) {
-            return new Inicere(path).makePermanent();
-        }
-
-        public static Inicere permanentBoundFile(Path path, Object object) {
-            return new Inicere(path, object).makePermanent();
-        }
-
-        public Inicere build() {
-            Inicere inicere = new Inicere(file);
-            if(permanent) inicere.makePermanent();
-            if(object != null) inicere.bind(object);
-            if(action != null) inicere.defaultAction(action);
-            return inicere;
-        }
-
-        /**
-         * File is required for library to work.
-         * @param path Path to operational file.
-         */
-        public Phi setFile(Path path) {
-            this.file = path;
-            return this;
-        }
-
-        public Phi setObject(Object object) {
-            this.object = object;
-            return this;
-        }
-
-        public Phi setDefaultAction(DefaultAction action) {
-            this.action = action;
-            return this;
-        }
-
-        public Phi makePermanent() {
-            this.permanent = true;
-            return this;
-        }
+    private void throwIfNotBound() throws IOException {
+        if (bound == null) throw new IOException("File scaffolding not provided.");
     }
 }
