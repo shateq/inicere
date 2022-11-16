@@ -1,4 +1,4 @@
-package shateq.java.inicere.api;
+package shateq.inicere.api;
 
 /**
  * Generic Action context.

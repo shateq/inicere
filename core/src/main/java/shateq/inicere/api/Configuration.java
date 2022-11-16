@@ -1,10 +1,10 @@
-package shateq.java.inicere.api;
+package shateq.inicere.api;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import shateq.java.inicere.annotation.Comment;
-import shateq.java.inicere.annotation.DataSection;
-import shateq.java.inicere.annotation.Element;
+import shateq.inicere.annotate.Comment;
+import shateq.inicere.annotate.DataSection;
+import shateq.inicere.annotate.Element;
 
 import java.io.IOException;
 import java.lang.reflect.Field;

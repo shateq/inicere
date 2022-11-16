@@ -1,4 +1,4 @@
-package shateq.java.inicere.annotation;
+package shateq.inicere.annotate;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

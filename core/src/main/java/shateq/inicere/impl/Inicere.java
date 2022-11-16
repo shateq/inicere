@@ -1,11 +1,11 @@
-package shateq.java.inicere;
+package shateq.inicere.impl;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import shateq.java.inicere.api.Action;
-import shateq.java.inicere.api.Configuration;
-import shateq.java.inicere.api.DefaultAction;
-import shateq.java.inicere.api.Key;
+import shateq.inicere.api.Action;
+import shateq.inicere.api.Configuration;
+import shateq.inicere.api.DefaultAction;
+import shateq.inicere.api.Key;
 
 import java.io.IOException;
 import java.nio.file.Path;

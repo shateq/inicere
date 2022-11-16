@@ -1,4 +1,4 @@
-package shateq.java.inicere.api;
+package shateq.inicere.api;
 
 @FunctionalInterface
 public interface DefaultAction {

@@ -1,4 +1,4 @@
-package shateq.java.inicere.annotation;
+package shateq.inicere.annotate;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
