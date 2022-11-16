@@ -1,10 +1,19 @@
-# Experimental - only an idea
-
-# **Inicere**
+# Experimental concept - Inicere
 
 Lightweight, practical library for working with TOML files.
-
 Goal: Lightweight work multiple files using simple (with event handler)
+
+<details open >
+  <summary><h2>
+    Table of Contents
+  </h2></summary>
+
+1. [Start](#getting-started)
+2. [Examples](#examples)
+3. [Develop](#develop)
+4. [License](#license)
+
+</details>
 
 <hr>
 
@@ -24,37 +33,21 @@ repositories {
 }
 
 dependencies {
-    implementation("cf.shateq:Inicere:(Version tag)")
+    implementation("cf.shateq:inicere-core:(Version tag)")
 }
-```
-
-**Maven**
-
-```xml
-
-<repository>
-    <id>jitpack.io</id>
-    <url>https://jitpack.io</url>
-</repository>
-```
-
-```xml
-
-<dependency>
-    <groupId>cf.shateq</groupId>
-    <artifactId>Inicere</artifactId>
-    <version>(Version Tag)</version>
-</dependency>
 ```
 
 </details>
 
-### Then
+## Examples
 
-Create a new Inicere object.
+[Examples](/examples) project
+
+<details>
+<summary>Inicere instance</summary>
 
 ```java
-public class AnyName {
+class A {
     @Element("object")
     public boolean good = false;
 
@@ -77,13 +70,14 @@ public class AnyName {
     }
 }
 ```
+</details>
 
 <details>
-<summary>I want more!</summary>
+<summary>Class serialization</summary>
 
 ```java
-public class Main {
-    public static void main(String[] args) {
+class B {
+     void func() {
         Inicere paths = new Inicere(Path.of("file-name.toml"));
         paths.bind(new DefaultFile());
         paths.bound().key$to$integer; // 2
@@ -111,11 +105,13 @@ public class Main {
         double pi = 3.14;
     }
 }
-
 ```
-
 </details>
 
-### **License**
+## Develop
 
-Project is licensed under MIT. Check `LICENSE` file for details.
+Gradle guides, modules
+
+## License
+
+Licensed under MIT. Check [LICENSE](LICENSE) file for details.

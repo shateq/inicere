@@ -173,11 +173,6 @@ public class Inicere {
         return remove(key.toString());
     }
 
-    // TODO: move
-//    private static @NotNull Path getConfigPath(@NotNull String file) {
-//        return Path.of(FabricLoader.getInstance().getConfigDir().toString(), file);
-//    }
-
     /**
      * Inicere builder
      * Ability to tweak worker class or use predefined settings.
