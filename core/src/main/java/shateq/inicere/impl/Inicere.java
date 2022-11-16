@@ -1,13 +1,13 @@
 package shateq.inicere.impl;
 
 import org.jetbrains.annotations.NotNull;
-import shateq.inicere.api.Action;
 import shateq.inicere.api.Configuration;
 import shateq.inicere.api.DefaultAction;
 import shateq.inicere.api.Worker;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
@@ -16,13 +16,13 @@ import java.nio.file.Path;
 public class Inicere implements Configuration, Worker {
     // TODO: is config field needed?
     private final Inicere config;
-    private File file;
     private DefaultAction defaultAction;
     private DefaultAction subscription;
 
+    private Object bound; // Accessible object
+    private File file;
+
     public boolean readonly;
-    // Accessible object
-    private Object bound;
 
     public Inicere(File file) {
         this.file = file;
@@ -78,8 +78,13 @@ public class Inicere implements Configuration, Worker {
     }
 
     @Override
-    public String kill() {
-        return config.kill();
+    public String kill() throws IOException {
+        throwIfReadonly();
+        throwIfNoFile();
+        if (file.delete()) {
+            return file.getName();
+        }
+        throw new IOException("File could not be deleted.");
     }
 
     @Override
@@ -88,6 +93,7 @@ public class Inicere implements Configuration, Worker {
     }
 
     //TODO: should be in Worker interface
+
     /**
      * Initialize acton conditions.
      *
@@ -131,7 +137,12 @@ public class Inicere implements Configuration, Worker {
         if (readonly) throw new IOException("Write access denied.");
     }
 
-    private void throwIfNotBound() throws IOException {
+    // TODO: resolve if no file
+    private void throwIfNoFile() throws IOException {
+        if (file == null) throw new IOException("File is null.");
+    }
+
+    private void throwIfNoBound() throws IOException {
         if (bound == null) throw new IOException("File scaffolding not provided.");
     }
 }

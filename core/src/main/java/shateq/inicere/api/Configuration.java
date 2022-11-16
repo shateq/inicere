@@ -9,9 +9,11 @@ public interface Configuration {
     String charset = "UTF-8";
 
     Inicere setFile(File file);
+
     File file();
 
     Inicere bind(Object obj);
+
     Object bound();
 
     <R> R get(String key);
@@ -20,7 +22,11 @@ public interface Configuration {
 
     <D> D delete(String key) throws IOException;
 
-    String kill(); //filename
+    /**
+     * Delete a file.
+     * @return Deleted filename
+     */
+    String kill() throws IOException; //filename
 
     void setReadonly(boolean readonly);
 
@@ -81,35 +87,7 @@ public interface Configuration {
 ////        c.close();
 //    }
 //
-
-//
-//    public <T> T retract(@NotNull String key) throws IOException {
-////        readOnlyException();
-////        final CommentedFileConfig c = toml();
-////        c.load();
-////        T retracted = c.get(key);
-////        c.remove(key);
-////        return retracted;
-//        // TODO: broken 2
-//        return (T) "read";
-//    }
-//
-//    /**
-//     * Remove current configuration file.
-//     */
-//    public void eliminate() throws IOException {
-//        readOnlyException();
-//        Files.deleteIfExists(path);
-//    }
-//
-//    private void readOnlyException() throws IOException {
-//        if(readOnly) {
-//            throw new IOException("Configuration file is read-only!");
-//        }
-//    }
-//
 //    public boolean viable() {
 //        return Files.isReadable(path) && Files.isWritable(path);
 //    }
-//    // More helpers
 }
