@@ -6,23 +6,21 @@ dependencies {
     implementation(project(":core"))
     include(project(":core"))
 }
-/* TODO: testmod to kotlin dsl
-sourceSets {
-    testmod {
-        compileClasspath += sourceSets.main.compileClasspath
-        runtimeClasspath += sourceSets.main.runtimeClasspath
-    }
+
+sourceSets.create("testmod") {
+    compileClasspath += sourceSets.main.get().compileClasspath
+    runtimeClasspath += sourceSets.main.get().runtimeClasspath
 }
+
 loom {
     runs {
-        testmodClient {
+        create("testmodClient") {
             client()
-            source(sourceSets.testmod)
+            source(sourceSets.getByName("testmod"))
         }
-
-        testmodServer {
+        create("testmodServer") {
             server()
-            source(sourceSets.testmod)
+            source(sourceSets.getByName("testmod"))
         }
     }
-}*/
+}

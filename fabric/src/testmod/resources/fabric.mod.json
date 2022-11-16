@@ -4,17 +4,13 @@
   "version": "1.0.0",
   "license": "MIT",
   "name": "InicereTestMod",
-  "description": "Test is all done here.",
   "authors": [
     "Shateq"
   ],
-  "contact": {
-    "homepage": "https://fabricmc.net/"
-  },
   "environment": "*",
   "entrypoints": {
     "client": [
-      "shateq.mods.iniceretest.TestMod"
+      "shateq.inicere.fabric.testmod.TestMod"
     ]
   },
   "mixins": [
