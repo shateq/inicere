@@ -5,31 +5,28 @@ import shateq.inicere.api.Configuration;
 import shateq.inicere.api.FunctionalAction;
 import shateq.inicere.api.Worker;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 
 import static shateq.inicere.api.ActionBreed.*;
 
 /**
  * Inicere worker.
+ * Reading using BufferedReader or java.nio
  */
 public class Inicere implements Configuration, Worker {
-    // TODO: is config field needed?
-    private final Inicere config;
-
+    public boolean readonly;
     private FunctionalAction subscribe;
+    // Constructed
     private Object bound; // Accessible object
     private File file;
-
-    public boolean readonly;
 
     /**
      * @param file File path
      */
     public Inicere(File file) {
         this.file = file;
-        this.config = new Inicere(file);
+        //this.config = new Inicere(file); //TODO: fix recusrion
     }
 
     public Inicere(@NotNull Path path) {
@@ -64,23 +61,24 @@ public class Inicere implements Configuration, Worker {
     }
 
     @Override
-    public <R> R get(String key) {
+    public <R> R get(String key) throws IOException {
         act(new Action(GET, file.getName(), key));//GET action
-        return config.get(key);
+        //BufferedReader br = new BufferedReader(new FileReader(file));
+        return null;
     }
 
     @Override
     public <S> S set(String key, S value) throws IOException {
         throwIfReadonly();
         act(new Action(SET, file.getName(), key));//SET action
-        return config.set(key, value);
+        return null;
     }
 
     @Override
     public <D> D delete(String key) throws IOException {
         throwIfReadonly();
         act(new Action(DELETE, file.getName(), key));//DEL action
-        return config.delete(key);
+        return null;
     }
 
     @Override

@@ -2,18 +2,17 @@ plugins {
     id("inicere.fabric")
 }
 
+sourceSets.create("testmod") {
+    compileClasspath += sourceSets.main.get().runtimeClasspath
+    runtimeClasspath += sourceSets.main.get().runtimeClasspath
+}
+
+val testmodImplementation by configurations
 dependencies {
     implementation(project(":core"))
     include(project(":core"))
-}
 
-sourceSets.create("testmod") {
-    compileClasspath += sourceSets.main.get().compileClasspath
-    runtimeClasspath += sourceSets.main.get().runtimeClasspath
-
-    dependencies {
-        implementation(sourceSets.main.get().output)
-    }
+    testmodImplementation(sourceSets.main.get().output)
 }
 
 loom {

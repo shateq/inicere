@@ -12,7 +12,6 @@ dependencies {
     minecraft("com.mojang:minecraft:${project.ext["mc"]}")
     mappings(loom.officialMojangMappings())
     modImplementation("net.fabricmc:fabric-loader:${project.ext["loader"]}")
-    //testmodImplementation(sourceSets.main.output)
 }
 
 tasks.processResources {

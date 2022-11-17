@@ -3,7 +3,7 @@
   "id": "testmod",
   "version": "1.0.0",
   "license": "MIT",
-  "name": "InicereTestMod",
+  "name": "Inicere TestMod",
   "authors": [
     "Shateq"
   ],
@@ -13,9 +13,7 @@
       "shateq.inicere.fabric.testmod.TestMod"
     ]
   },
-  "mixins": [
-    "testmod.mixins.json"
-  ],
+  "mixins": [],
   "depends": {
     "fabricloader": ">=0.11.3",
     "inicere": "*",

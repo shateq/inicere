@@ -33,7 +33,6 @@ public class TestMod implements ClientModInitializer {
                 log.debug("{} key updated in the file {}", action.key(), action.filename());
             }
         });
-
-        inicere.get("testkey");
+        //inicere.get("testkey");
     }
 }

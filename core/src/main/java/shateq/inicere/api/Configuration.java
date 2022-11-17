@@ -14,7 +14,7 @@ public interface Configuration {
 
     Object bound();
 
-    <R> R get(String key);
+    <R> R get(String key) throws IOException;
 
     <S> S set(String key, S value) throws IOException;
 
