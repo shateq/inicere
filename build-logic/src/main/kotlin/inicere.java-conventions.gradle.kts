@@ -7,6 +7,7 @@ base.archivesName.set("inicere-${project.name}-${rootProject.version}")
 repositories {
     mavenCentral()
 }
+
 dependencies.implementation("org.jetbrains:annotations:16.0.2")
 
 java {

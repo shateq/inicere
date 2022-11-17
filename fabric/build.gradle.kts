@@ -10,6 +10,10 @@ dependencies {
 sourceSets.create("testmod") {
     compileClasspath += sourceSets.main.get().compileClasspath
     runtimeClasspath += sourceSets.main.get().runtimeClasspath
+
+    dependencies {
+        implementation(sourceSets.main.get().output)
+    }
 }
 
 loom {
