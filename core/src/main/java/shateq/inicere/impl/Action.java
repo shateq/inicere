@@ -1,40 +1,14 @@
 package shateq.inicere.impl;
 
+import org.jetbrains.annotations.Nullable;
+import shateq.inicere.api.ActionBreed;
+
 /**
- * Generic Action context.
+ * Value-protected action context
+ * value passed inside the action (shouldn't be there)
+ *
+ * @param type  Config action type
+ * @param key   Key used inside config action
  */
-@SuppressWarnings("unused")
-public class Action {
-    private final Object value;
-    private final String key;
-    private final Type type;
-
-    public Action(Type type) {
-        this.type = type;
-        this.key = null;
-        this.value = null;
-    }
-
-    public Action(String key, Object value, Type type) {
-        this.key = key;
-        this.value = value;
-        this.type = type;
-    }
-
-    /* TODO: Should, or shouldn't this be exposed? */
-    public Object getValue() {
-        return value;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public enum Type {
-        SET, GET, DELETE, KILL, DEFAULT
-    }
+public record Action(ActionBreed type, String filename, @Nullable String key) {
 }

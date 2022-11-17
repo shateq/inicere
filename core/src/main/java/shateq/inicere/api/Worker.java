@@ -1,5 +1,12 @@
 package shateq.inicere.api;
 
-public interface Worker {
+import shateq.inicere.impl.Action;
 
+/**
+ * Event handling
+ */
+public interface Worker {
+    void act(Action action);
+
+    void subscribe(FunctionalAction lambda);
 }

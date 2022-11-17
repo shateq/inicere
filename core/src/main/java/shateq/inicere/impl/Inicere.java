@@ -2,13 +2,14 @@ package shateq.inicere.impl;
 
 import org.jetbrains.annotations.NotNull;
 import shateq.inicere.api.Configuration;
-import shateq.inicere.api.DefaultAction;
+import shateq.inicere.api.FunctionalAction;
 import shateq.inicere.api.Worker;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
+
+import static shateq.inicere.api.ActionBreed.*;
 
 /**
  * Inicere worker.
@@ -16,14 +17,16 @@ import java.nio.file.Path;
 public class Inicere implements Configuration, Worker {
     // TODO: is config field needed?
     private final Inicere config;
-    private DefaultAction defaultAction;
-    private DefaultAction subscription;
 
+    private FunctionalAction subscribe;
     private Object bound; // Accessible object
     private File file;
 
     public boolean readonly;
 
+    /**
+     * @param file File path
+     */
     public Inicere(File file) {
         this.file = file;
         this.config = new Inicere(file);
@@ -62,18 +65,21 @@ public class Inicere implements Configuration, Worker {
 
     @Override
     public <R> R get(String key) {
+        act(new Action(GET, file.getName(), key));//GET action
         return config.get(key);
     }
 
     @Override
     public <S> S set(String key, S value) throws IOException {
         throwIfReadonly();
+        act(new Action(SET, file.getName(), key));//SET action
         return config.set(key, value);
     }
 
     @Override
     public <D> D delete(String key) throws IOException {
         throwIfReadonly();
+        act(new Action(DELETE, file.getName(), key));//DEL action
         return config.delete(key);
     }
 
@@ -82,6 +88,7 @@ public class Inicere implements Configuration, Worker {
         throwIfReadonly();
         throwIfNoFile();
         if (file.delete()) {
+            act(new Action(KILL, file.getName(), null));//KILL action
             return file.getName();
         }
         throw new IOException("File could not be deleted.");
@@ -92,57 +99,31 @@ public class Inicere implements Configuration, Worker {
         this.readonly = readonly;
     }
 
-    //TODO: should be in Worker interface
-
-    /**
-     * Initialize acton conditions.
-     *
-     * @param thing - Action context.
-     * @return Modified (or not) Action object.
-     */
-    private Action act(Action thing, boolean defaultAction) {
-        if (defaultAction) {
-            this.defaultAction.proceed(thing);
-            return thing;
-        }
-        this.subscription.proceed(thing);
-        return thing;
+    @Override
+    public void act(Action thing) {
+        this.subscribe.proceed(thing);
     }
 
-    /**
-     * Function fired on generating configuration, or resetting one.
-     * See also {@link #subscribe(DefaultAction)}
-     *
-     * @param action Your lambda.
-     */
-    public Inicere defaultAction(@NotNull DefaultAction action) {
-        this.defaultAction = action;
-        return this;
+    @Override
+    public void subscribe(@NotNull FunctionalAction action) {
+        this.subscribe = action;
     }
 
-    /**
-     * Fired before any action done with configuration except resetting it, see {@link #defaultAction(DefaultAction)}
-     *
-     * @param action Your lambda.
-     */
-    public Inicere subscribe(@NotNull DefaultAction action) {
-        this.subscription = action;
-        return this;
+    // PROTECTED HELPERS
+    protected void throwIfReadonly() throws IOException {
+        if (readonly || !file.canWrite()) throw new IOException("Write access denied.");
     }
 
-    /*
-    Helpers
-     */
-    private void throwIfReadonly() throws IOException {
-        if (readonly) throw new IOException("Write access denied.");
+    protected void throwIfUnreadable() throws IOException {
+        if (!file.canRead()) throw new IOException("Cannot read the file");
     }
 
     // TODO: resolve if no file
-    private void throwIfNoFile() throws IOException {
-        if (file == null) throw new IOException("File is null.");
+    protected void throwIfNoFile() throws IOException {
+        if (file == null) throw new IOException("File is unreadable.");
     }
 
-    private void throwIfNoBound() throws IOException {
-        if (bound == null) throw new IOException("File scaffolding not provided.");
+    protected void throwIfNoBound() throws IOException {
+        if (bound == null) throw new IOException("File template not provided.");
     }
 }
