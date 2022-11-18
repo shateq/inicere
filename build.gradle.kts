@@ -8,7 +8,9 @@ description = "Config library, not focussed on number of formats"
 
 allprojects {
     project.ext {
-        set("mc", "1.18.1")
-        set("loader", "0.12.12")
+        set("mc", "1.18.2")
+        set("loader", "0.14.10")
+        set("fapi", "0.59.0+1.18.2")
+        set("modmenu", "3.2.3")
     }
 }

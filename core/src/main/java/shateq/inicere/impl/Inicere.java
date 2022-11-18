@@ -62,6 +62,7 @@ public class Inicere implements Configuration, Worker {
 
     @Override
     public <R> R get(String key) throws IOException {
+        throwIfUnreadable();
         act(new Action(GET, file.getName(), key));//GET action
         //BufferedReader br = new BufferedReader(new FileReader(file));
         return null;
