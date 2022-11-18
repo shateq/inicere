@@ -100,6 +100,7 @@ public class Inicere implements Configuration, Worker {
 
     @Override
     public void act(Action thing) {
+        if (this.subscribe == null) return;
         this.subscribe.proceed(thing);
     }
 
