@@ -13,6 +13,7 @@ dependencies {
     include(project(":core"))
 
     testmodImplementation(sourceSets.main.get().output)
+    //testmodImplementation("com.terraformersmc:modmenu:${project.ext["modmenu"]}")
 }
 
 loom {
