@@ -1,5 +1,5 @@
 "k" = "somedata"
-["table"]
+[table]
 "key.another" = "not lying"
 "key" = true
 "key.dot" = "string"

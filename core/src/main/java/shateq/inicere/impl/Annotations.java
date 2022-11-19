@@ -7,11 +7,13 @@ import shateq.inicere.annotate.DataSection;
 import shateq.inicere.annotate.Element;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Annotations {
+    protected static Set<Map.Entry<String, Object>> getEntryKeySet() {
+        return new HashSet<>();
+    }
+
     protected static @NotNull Map<Element, Field> getElements(@NotNull Object o) {
         Map<Element, Field> elements = new HashMap<>();
         Field[] fields = o.getClass().getDeclaredFields();

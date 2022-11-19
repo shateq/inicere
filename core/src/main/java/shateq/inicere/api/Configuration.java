@@ -18,6 +18,12 @@ public interface Configuration {
 
     Object bound();
 
+    /**
+     * Get a value from the Toml file
+     * @param key Dotted key
+     * @return Value
+     * @param <R> Object type
+     */
     <R> R get(String key) throws IOException;
 
     <S> S set(String key, S value) throws IOException;
