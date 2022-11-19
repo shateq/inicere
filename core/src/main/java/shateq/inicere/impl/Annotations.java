@@ -40,8 +40,7 @@ public class Annotations {
     protected static @Nullable DataSection getDataSection(@NotNull Object o) {
         return o.getClass().getAnnotation(DataSection.class);
     }
-/*
-    public void defaults(Object o) throws IllegalAccessException {
+    /*public void defaults(Object o) throws IllegalAccessException {
         Map<Element, Field> elements = getElements(o);
         final CommentedFileConfig c = toml();
         c.load();
@@ -58,6 +57,5 @@ public class Annotations {
             c.set(key, field.get(o));
         }
         c.close();
-    }
-}*/
+    }*/
 }

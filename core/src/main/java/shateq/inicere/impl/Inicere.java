@@ -7,18 +7,19 @@ import shateq.inicere.api.Worker;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 import static shateq.inicere.api.ActionBreed.*;
 
 /**
- * Inicere worker.
- * Reading using BufferedReader or java.nio
+ * Inicere implementation, in use of java.nio
  */
 public class Inicere implements Configuration, Worker {
+    private final List<FunctionalAction> subscription = new ArrayList<>();
     public boolean readonly;
-    private FunctionalAction subscribe;
-    // Constructed
-    private Object bound; // Accessible object
+
+    private Object bound; //Accessible object
     private File file;
 
     /**
@@ -26,7 +27,6 @@ public class Inicere implements Configuration, Worker {
      */
     public Inicere(File file) {
         this.file = file;
-        //this.config = new Inicere(file); //TODO: fix recusrion
     }
 
     public Inicere(@NotNull Path path) {
@@ -100,13 +100,20 @@ public class Inicere implements Configuration, Worker {
 
     @Override
     public void act(Action thing) {
-        if (this.subscribe == null) return;
-        this.subscribe.proceed(thing);
+        if (this.subscription.isEmpty()) return;
+        this.subscription.forEach(
+            action -> action.proceed(thing)
+        );
     }
 
     @Override
     public void subscribe(@NotNull FunctionalAction action) {
-        this.subscribe = action;
+        this.subscription.add(action);
+    }
+
+    @Override
+    public void unsubscribe() {
+        this.subscription.clear();
     }
 
     // PROTECTED HELPERS
@@ -118,8 +125,8 @@ public class Inicere implements Configuration, Worker {
         if (!file.canRead()) throw new IOException("Cannot read the file");
     }
 
-    // TODO: resolve if no file
-    protected void throwIfNoFile() throws IOException {
+    protected void throwIfNoFile() throws IOException { //TODO: resolve if no file
+
         if (file == null) throw new IOException("File is unreadable.");
     }
 

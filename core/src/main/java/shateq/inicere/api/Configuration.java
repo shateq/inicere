@@ -9,8 +9,8 @@ public interface Configuration {
     Inicere setFile(File file);
 
     File file();
-    // TODO: should be configuration
-    Inicere bind(Object obj);
+
+    Inicere bind(Object obj); // TODO: should return configuration
 
     Object bound();
 

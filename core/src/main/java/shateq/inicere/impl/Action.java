@@ -4,11 +4,11 @@ import org.jetbrains.annotations.Nullable;
 import shateq.inicere.api.ActionBreed;
 
 /**
- * Value-protected action context
- * value passed inside the action (shouldn't be there)
+ * Action Context
+ * ASAP (As safe as possible)
  *
- * @param type  Config action type
- * @param key   Key used inside config action
+ * @param type Config action type
+ * @param key  Key used inside config action
  */
 public record Action(ActionBreed type, String filename, @Nullable String key) {
 }
