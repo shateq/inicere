@@ -18,7 +18,6 @@ dependencies {
 
 tasks.processResources {
     filteringCharset = "UTF-8"
-
     filesMatching("fabric.mod.json") {
         expand("version" to rootProject.version)
     }

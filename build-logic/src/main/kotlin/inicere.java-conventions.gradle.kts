@@ -1,3 +1,5 @@
+import java.time.LocalDate
+
 plugins {
     java
 }
@@ -19,19 +21,21 @@ tasks {
         options.encoding = "UTF-8"
         options.release.set(17)
     }
-
     javadoc {
         options.encoding = "UTF-8"
         //options.destinationDirectory(File(rootDir, "docs"))
     }
-
     jar {
         from(File(rootDir, "LICENSE")) {
             rename { "LICENSE_${rootProject.name}" }
         }
-
         manifest {
-            attributes["Implementation-Version"] = project.version
+            attributes(
+                "Implementation-Title" to "inicere-"+project.name,
+                "Implementation-Version" to rootProject.version,
+                "Implementation-Build-Date" to LocalDate.now(),
+                "Package" to "shateq.inicere"
+            )
         }
     }
 }
