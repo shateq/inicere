@@ -8,7 +8,7 @@ repositories {
     mavenCentral()
 }
 
-dependencies.implementation("org.jetbrains:annotations:16.0.2")
+dependencies.implementation("org.jetbrains", "annotations", project.ext["jb"] as String)
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
@@ -22,7 +22,7 @@ tasks {
 
     javadoc {
         options.encoding = "UTF-8"
-        // options.destinationDirectory(File(rootDir, "docs"))
+        //options.destinationDirectory(File(rootDir, "docs"))
     }
 
     jar {

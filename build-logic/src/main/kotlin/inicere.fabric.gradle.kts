@@ -9,11 +9,11 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${project.ext["mc"]}")
+    minecraft("com.mojang", "minecraft", project.ext["mc"] as String)
     mappings(loom.officialMojangMappings())
 
-    modImplementation("net.fabricmc:fabric-loader:${project.ext["loader"]}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${project.ext["fapi"]}")
+    modImplementation("net.fabricmc", "fabric-loader", project.ext["loader"] as String)
+    modImplementation("net.fabricmc.fabric-api", "fabric-api", project.ext["fapi"] as String)
 }
 
 tasks.processResources {
