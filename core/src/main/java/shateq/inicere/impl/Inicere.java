@@ -5,7 +5,9 @@ import shateq.inicere.api.Configuration;
 import shateq.inicere.api.FunctionalAction;
 import shateq.inicere.api.Worker;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,32 +22,32 @@ public class Inicere implements Configuration, Worker {
     public boolean readonly;
 
     private Object bound; //Accessible object
-    private File file;
+    private Path file;
 
     /**
-     * @param file File path
+     * @param path File path
      */
-    public Inicere(File file) {
-        this.file = file;
+    public Inicere(Path path) {
+        this.file = path;
     }
 
-    public Inicere(@NotNull Path path) {
-        this(path.toFile());
+    public Inicere(@NotNull File file) {
+        this(file.toPath());
     }
 
-    public Inicere(File file, Object obj) {
-        this(file);
+    public Inicere(Path path, Object obj) {
+        this(path);
         this.bound = obj;
     }
 
     @Override
-    public Inicere setFile(File file) {
-        this.file = file;
+    public Inicere setFile(Path path) {
+        this.file = path;
         return this;
     }
 
     @Override
-    public File file() {
+    public Path file() {
         return file;
     }
 
@@ -63,22 +65,21 @@ public class Inicere implements Configuration, Worker {
     @Override
     public <R> R get(String key) throws IOException {
         throwIfUnreadable();
-        act(new Action(GET, file.getName(), key));//GET action
-        //BufferedReader br = new BufferedReader(new FileReader(file));
+        act(new Action(GET, file.getFileName().toString(), key));//GET action
         return null;
     }
 
     @Override
     public <S> S set(String key, S value) throws IOException {
         throwIfReadonly();
-        act(new Action(SET, file.getName(), key));//SET action
+        act(new Action(SET, file.getFileName().toString(), key));//SET action
         return null;
     }
 
     @Override
     public <D> D delete(String key) throws IOException {
         throwIfReadonly();
-        act(new Action(DELETE, file.getName(), key));//DEL action
+        act(new Action(DELETE, file.getFileName().toString(), key));//DEL action
         return null;
     }
 
@@ -86,9 +87,9 @@ public class Inicere implements Configuration, Worker {
     public String kill() throws IOException {
         throwIfReadonly();
         throwIfNoFile();
-        if (file.delete()) {
-            act(new Action(KILL, file.getName(), null));//KILL action
-            return file.getName();
+        if (Files.deleteIfExists(file)) {
+            act(new Action(KILL, file.getFileName().toString(), null));//KILL action
+            return file.getFileName().toString();
         }
         throw new IOException("File could not be deleted.");
     }
@@ -118,15 +119,14 @@ public class Inicere implements Configuration, Worker {
 
     // PROTECTED HELPERS
     protected void throwIfReadonly() throws IOException {
-        if (readonly || !file.canWrite()) throw new IOException("Write access denied.");
+        if (readonly || !Files.isWritable(file)) throw new IOException("Write access denied.");
     }
 
     protected void throwIfUnreadable() throws IOException {
-        if (!file.canRead()) throw new IOException("Cannot read the file");
+        if (!Files.isReadable(file)) throw new IOException("Cannot read the file");
     }
 
     protected void throwIfNoFile() throws IOException { //TODO: resolve if no file
-
         if (file == null) throw new IOException("File is unreadable.");
     }
 

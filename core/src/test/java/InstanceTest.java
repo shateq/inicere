@@ -1,21 +1,24 @@
 import org.junit.jupiter.api.Test;
-import shateq.inicere.impl.Inicere;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 public class InstanceTest {
     @Test
-    void createNew() throws URISyntaxException, IOException {
-        ClassLoader loader = getClass().getClassLoader();
-        File resource = new File(loader.getResource("test.toml").getFile());
+    void createNew() throws IOException {
+        Path path = Paths.get("src/test/resources/test.toml");
 
-        System.out.println(resource.getAbsolutePath());
-        Inicere inicere = new Inicere(new File(resource.getAbsolutePath()));
+        List<String> list = Files.readAllLines(path);
+        for (String i :
+            list) {
+            System.out.println(i);
+        }
 
-        assertDoesNotThrow(() -> inicere.get("k"));
+        System.out.println(path.toAbsolutePath());
+        //Inicere inicere = new Inicere(new File(resource.getAbsolutePath()));
+        //assertDoesNotThrow(() -> inicere.get("k"));
     }
 }

@@ -2,15 +2,19 @@ package shateq.inicere.api;
 
 import shateq.inicere.impl.Inicere;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
 public interface Configuration {
-    Inicere setFile(File file);
+    Charset charset = StandardCharsets.UTF_8;
 
-    File file();
+    Inicere setFile(Path file);
 
-    Inicere bind(Object obj); // TODO: should return configuration
+    Path file();
+
+    Inicere bind(Object obj); //TODO: should return configuration
 
     Object bound();
 
