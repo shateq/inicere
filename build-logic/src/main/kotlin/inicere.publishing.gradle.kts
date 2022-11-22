@@ -3,7 +3,7 @@ plugins {
     `maven-publish`
 }
 
-group = "inicere.group"
+group = rootProject.group
 
 publishing {
     publications {

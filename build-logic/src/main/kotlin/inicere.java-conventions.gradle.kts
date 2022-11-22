@@ -4,10 +4,15 @@ plugins {
     java
 }
 
-base.archivesName.set("inicere-${project.name}-${rootProject.version}")
+base.archivesName.set("inicere-${project.name}-${version}")
+version = rootProject.version
+group = rootProject.group
 
 repositories {
     mavenCentral()
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://maven.terraformersmc.com/releases")
+    maven("https://jitpack.io")
 }
 
 dependencies.implementation("org.jetbrains", "annotations", project.ext["jb"] as String)

@@ -3,11 +3,6 @@ plugins {
     id("fabric-loom")
 }
 
-repositories {
-    maven("https://maven.terraformersmc.com/releases")
-    maven("https://jitpack.io")
-}
-
 dependencies {
     minecraft("com.mojang", "minecraft", project.ext["mc"] as String)
     mappings(loom.officialMojangMappings())
